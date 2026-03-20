@@ -16,7 +16,7 @@ export default () => {
     <ReactNative.ScrollView>
       <FormSwitchRow
         label="Track Edit History"
-        subLabel="Keep previous message versions and show them inline."
+        subLabel="Keep previous message versions behind a hidden spoiler block."
         leading={<FormIcon source={getAssetIDByName("ic_edit_24px")} />}
         onValueChange={(v) => void (storage.logEdits = v)}
         value={storage.logEdits}

@@ -58,12 +58,16 @@ const getVisibleContent = (content) => {
 };
 const formatTimestamp = (timestamp) => new Date(timestamp ?? Date.now()).toISOString().replace("T", " ").replace(/\.\d{3}Z$/, "Z");
 const formatHistoryEntry = (edit, index) => {
-  const lines = getVisibleContent(edit.content).split("\n").map((line) => `> ${line || " "}`).join("\n");
-  return `[#${index + 1} ${formatTimestamp(edit.editedAt)}]\n${lines}`;
+  const lines = getVisibleContent(edit.content).split("\n").map((line) => `  ${line || " "}`).join("\n");
+  return `#${index + 1} ${formatTimestamp(edit.editedAt)}\n${lines}`;
 };
-const buildEditHistoryText = (edits) => edits.length
-  ? `\n\n[Edit History]\n${edits.map((edit, index) => formatHistoryEntry(edit, index)).join("\n")}`
-  : "";
+const buildEditHistoryText = (edits) => {
+  if (!edits.length) return "";
+
+  const count = edits.length;
+  const label = `${count} previous version${count === 1 ? "" : "s"} hidden - tap to reveal`;
+  return `\n\n||${label}\n\n${edits.map((edit, index) => formatHistoryEntry(edit, index)).join("\n\n")}||`;
+};
 
 const applyMessageHistory = (message, extra = {}) => {
   const base = cloneMessage(message);
